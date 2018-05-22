@@ -80,9 +80,11 @@ int main(void) {
 	for(;;) {
 		adxl345_getdata(&ax, &ay, &az);
 
-		dtostrf(ax, 3, 5, itmp); USART0_print(itmp); USART0_print("7 ");
-		dtostrf(ay, 3, 5, itmp); USART0_print(itmp); USART0_print("7 ");
-		dtostrf(az, 3, 5, itmp); USART0_print(itmp); USART0_print("7 ");
+		//dtostrf(ax, 3, 5, itmp); USART0_print(itmp); USART0_print(" ");
+		//dtostrf(ay, 3, 5, itmp); USART0_print(itmp); USART0_print(" ");
+		//dtostrf(az, 3, 5, itmp); USART0_print(itmp); USART0_print(" ");
+    dtostrf(ax*ax+ay*ay+az*az, 3, 5, itmp); USART0_print(itmp); USART0_print(" ");
+    //dtostrf(abs(ax)+abs(ay)+abs(az), 3, 5, itmp); USART0_print(itmp); USART0_print(" ");
 
 		USART0_print("\n\r");
 
