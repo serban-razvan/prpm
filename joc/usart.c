@@ -1,5 +1,5 @@
 #include "usart.h"
-
+#include <stdlib.h>
 /*
  * Functie de initializare a controllerului USART
  */
@@ -12,10 +12,10 @@ void USART0_init()
     /* porneste transmitatorul */
     UCSR0B = (1<<TXEN0) | (1<<RXEN0);
 
-    /* seteaza formatul frame-ului: 8 biti de date, 1 biti de stop, paritate para */
+    /* seteaza formatul frame-ului: 8 biti de date, 1 biti de stop, paritate fara */
     UCSR0C &= ~(1<<USBS0);
     UCSR0C |= (2<<UCSZ00);
-    UCSR0C |= (1<<UPM01);
+    UCSR0C &= ~(3<<UPM00);
 }
 
 /*
@@ -44,6 +44,27 @@ char USART0_receive()
 
     /* returneaza datele din buffer */
     return UDR0;
+}
+
+
+double USART0_receive_own()
+{
+    char x[10];
+    int i;
+    char temp;
+    for (i=0;i<9;i++){
+        temp = USART0_receive();
+        if (temp == '\r'){
+            temp = USART0_receive();
+            if (temp == '\n'){
+                break;
+            }
+        }
+        x[i] = temp;
+    }
+    x[i] = 0;
+    double fin = atof(x);
+    return fin;
 }
 
 /*

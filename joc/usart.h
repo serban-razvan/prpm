@@ -28,7 +28,9 @@ char USART0_receive();
  *
  * @param data - sirul (terminat cu '\0') de transmis
  */
-void USART0_print(const char *data); 
+void USART0_print(const char *data);
+
+double USART0_receive_own();
 
 /*
  * Functie ce transmite un caracter prin USART

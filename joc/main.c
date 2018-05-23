@@ -19,6 +19,7 @@ Please refer to LICENSE file for licensing information.
 #include <util/atomic.h>
 
 #include "leduri.c"
+#include "usart.h"
 
 
 #include "adxl345/adxl345.h"
@@ -76,17 +77,24 @@ int main(void) {
 
 	//init mma7455
 	adxl345_init();
+	USART0_init();
 
 	double me;
 	double other;
+
+	USART0_print("Salut!1\r\n");
 
 	for(;;) {
 		adxl345_getdata(&ax, &ay, &az);
 
 		//int which = (int)(((ay+1)/2.0)*PIXELS);
-		double me = ax*ax+ay*ay+az*az;
-		int which = (int)((PIXELS*(ax*ax+ay*ay+az*az))/7);
-		//dtostrf(which, 3, 5, itmp); USART0_print(itmp); USART0_print(" \r\n");
+		USART0_print("Salut!1\r\n");
+		me = ax*ax+ay*ay+az*az;
+		USART0_print("Salut!2\r\n");
+		other = USART0_receive_own();
+		USART0_print("Salut!3\r\n");
+		int which = (int)((me / (me+other)) * PIXELS);
+		//int which = (int)((PIXELS*(ax*ax+ay*ay+az*az))/7);
 		for (int i=0; i < PIXELS ; i++) {
 			if (i <= which) {    
 				sendPixel( 0 , 255 , 0 );
@@ -95,7 +103,7 @@ int main(void) {
 			}
 		}
 
-		_delay_ms(50);
+		_delay_ms(10);
 
 	}
 
