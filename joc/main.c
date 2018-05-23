@@ -89,24 +89,23 @@ int main(void) {
 	for(;;) {
 		adxl345_getdata(&ax, &ay, &az);
 
-		//int which = (int)(((ay+1)/2.0)*PIXELS);
 		USART0_print("Salut!1\r\n");
 		me = ax*ax+ay*ay+az*az;
 		USART0_print("Salut!2\r\n");
 		other = USART0_receive_own();
 		USART0_print("Salut!3\r\n");
 		which = (int)((me / (me+other)) * PIXELS);
-		if (which > oldwhich) which++;
-		else if (which < oldwhich) which--;
-		//int which = (int)((PIXELS*(ax*ax+ay*ay+az*az))/7);
+		if (which > oldwhich) oldwhich++;
+		else if (which < oldwhich) oldwhich--;
+
+		
 		for (int i=0; i < PIXELS ; i++) {
-			if (i <= which) {    
+			if (i <= oldwhich) {    
 				sendPixel( 0 , 255 , 0 );
 			} else {
 				sendPixel( 255 , 0 , 0 );
 			}
 		}
-		oldwhich = which;
 
 		_delay_ms(10);
 
