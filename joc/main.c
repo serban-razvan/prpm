@@ -81,6 +81,8 @@ int main(void) {
 
 	double me;
 	double other;
+	int which;
+	int oldwhich = PIXELS / 2.0;
 
 	USART0_print("Salut!1\r\n");
 
@@ -93,7 +95,9 @@ int main(void) {
 		USART0_print("Salut!2\r\n");
 		other = USART0_receive_own();
 		USART0_print("Salut!3\r\n");
-		int which = (int)((me / (me+other)) * PIXELS);
+		which = (int)((me / (me+other)) * PIXELS);
+		if (which > oldwhich) which++;
+		else if (which < oldwhich) which--;
 		//int which = (int)((PIXELS*(ax*ax+ay*ay+az*az))/7);
 		for (int i=0; i < PIXELS ; i++) {
 			if (i <= which) {    
@@ -102,6 +106,7 @@ int main(void) {
 				sendPixel( 255 , 0 , 0 );
 			}
 		}
+		oldwhich = which;
 
 		_delay_ms(10);
 
