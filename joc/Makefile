@@ -1,21 +1,21 @@
 PORT ?= COM12
 
-all: lab1.hex
+all: program
 
 program: upload
 
-lab1.elf: main.c usart.c i2chw/twimaster.c adxl345/adxl345.c
+proiect.elf: main.c usart.c i2chw/twimaster.c adxl345/adxl345.c
 	avr-g++ -mmcu=atmega324p -DF_CPU=16000000 -Wall -Os -o $@ $^
 
-lab1.hex: lab1.elf
-	avr-objcopy -j .text -j .data -O ihex lab1.elf lab1.hex
-	avr-size lab1.elf
+proiect.hex: proiect.elf
+	avr-objcopy -j .text -j .data -O ihex proiect.elf proiect.hex
+	avr-size proiect.elf
 
-upload: lab1.hex
-	avrdude -c arduino -P $(PORT) -b 57600 -p atmega324p -U flash:w:$<:a
+upload: proiect.hex
+	../bootloadHID -r proiect.hex
 
 clean:
-	rm -rf lab1.elf lab1.hex
+	rm -rf proiect.elf proiect.hex
 
 .PHONY: all clean program upload
 
